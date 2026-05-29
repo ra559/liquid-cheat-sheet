@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Cheat Sheet</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #363636;
+            --code-bg: #f5f5f5;
+            --table-bg: #fafafa;
+            --border-color: #dbdbdb;
+        }
+
+        body.dark-mode {
+            --bg-color: #1e1e1e;
+            --text-color: #ececec;
+            --code-bg: #2d2d2d;
+            --table-bg: #252525;
+            --border-color: #404040;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar.dark-mode {
+            background-color: #2d2d2d;
+        }
+
+        .code-block-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 0;
+        }
+
+        /* Shiki syntax highlighting */
+        .shiki {
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            margin-bottom: 0 !important;
+        }
+
+        .shiki code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .shiki-light {
+            background-color: #ffffff;
+            color: #24292e;
+        }
+
+        .dark-mode .shiki-dark {
+            background-color: #2b2b2b;
+            color: #eceff4;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 6px 12px;
+            background-color: #3273dc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: #2366d1;
+        }
+
+        .copy-btn.copied {
+            background-color: #48c774;
+        }
+
+        table {
+            background-color: var(--table-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        table th {
+            background-color: var(--code-bg);
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+
+        table td {
+            border-color: var(--border-color);
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: var(--table-bg);
+        }
+
+        table tbody tr:hover {
+            background-color: var(--code-bg);
+        }
+
+        .section {
+            padding: 3rem 1.5rem;
+        }
+
+        .content h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .theme-toggle {
+            padding: 8px 16px;
+            background-color: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--code-bg);
+            border-color: #3273dc;
+        }
+
+        .navbar-item.navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        a {
+            color: #3273dc;
+        }
+
+        a:hover {
+            color: #2366d1;
+        }
+
+        .dark-mode a {
+            color: #5eb3ff;
+        }
+
+        .dark-mode a:hover {
+            color: #7ec7ff;
+        }
+
+        .print-btn {
+            padding: 8px 16px;
+            background-color: #48c774;
+            border: 2px solid #48c774;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .print-btn:hover {
+            background-color: #3aa373;
+            border-color: #3aa373;
+        }
+
+        /* Print styles for single-page optimization */
+        @media print {
+            .navbar {
+                display: none;
+            }
+
+            .copy-btn {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+                color: black;
+            }
+
+            .section {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .content h2 {
+                margin-top: 0.75rem;
+                margin-bottom: 0.5rem;
+                font-size: 1.25rem;
+                page-break-after: avoid;
+            }
+
+            .content h3 {
+                margin-top: 0.5rem;
+                margin-bottom: 0.25rem;
+                font-size: 1rem;
+                page-break-after: avoid;
+            }
+
+            .code-block-wrapper {
+                margin-bottom: 0.5rem;
+                page-break-inside: avoid;
+            }
+
+            pre {
+                padding: 0.5rem;
+                font-size: 0.75rem;
+                margin: 0;
+                page-break-inside: avoid;
+            }
+
+            code {
+                font-size: 0.75rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+                page-break-inside: avoid;
+                margin-bottom: 0.5rem;
+            }
+
+            table th,
+            table td {
+                padding: 0.25rem 0.5rem;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            a {
+                color: black;
+                text-decoration: underline;
+            }
+
+            /* Fit content to one page */
+            @page {
+                margin: 0.5in;
+                size: letter;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <div class="navbar-item navbar-brand">
+                💧 Liquid Cheat Sheet
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <button class="print-btn" id="printBtn">🖨️ Print</button>
+                </div>
+                <div class="navbar-item">
+                    <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="section">
+        <div class="container">
+            <div class="content">
+
+                <!-- TOOLS SECTION -->
+                <h2 id="tools">Tools</h2>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Time String generator</td>
+                            <td><a href="https://www.strfti.me/" target="_blank">https://www.strfti.me/</a></td>
+                        </tr>
+                        <tr>
+                            <td>Sandbox</td>
+                            <td><a href="https://jumpseller.com/support/liquid-sandbox/" target="_blank">https://jumpseller.com/support/liquid-sandbox/</a></td>
+                        </tr>
+                        <tr>
+                            <td>Documentation Braze</td>
+                            <td><a href="https://www.braze.com/docs/user_guide/messaging/design_and_edit/personalize/liquid" target="_blank">https://www.braze.com/docs/user_guide/messaging/design_and_edit/personalize/liquid</a></td>
+                        </tr>
+                        <tr>
+                            <td>Documentation Shopify</td>
+                            <td><a href="https://shopify.github.io/liquid/" target="_blank">https://shopify.github.io/liquid/</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- VARIABLE ASSIGNMENTS SECTION -->
+                <h2 id="variables">Variable Assignments</h2>
+
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign variable_name = value %}</code></pre>
+                </div>
+
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% capture variable_name %}value{% endcapture %}</code></pre>
+                </div>
+
+                <!-- CONTROL FLOW SECTION -->
+                <h2 id="control-flow">Control Flow</h2>
+
+                <h3>Operators</h3>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>==</code></td>
+                            <td>equals</td>
+                        </tr>
+                        <tr>
+                            <td><code>!=</code></td>
+                            <td>does not equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>&gt;</code></td>
+                            <td>greater than</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;</code></td>
+                            <td>less than</td>
+                        </tr>
+                        <tr>
+                            <td><code>&gt;=</code></td>
+                            <td>greater than or equal to</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;=</code></td>
+                            <td>less than or equal to</td>
+                        </tr>
+                        <tr>
+                            <td><code>or</code></td>
+                            <td>logical or</td>
+                        </tr>
+                        <tr>
+                            <td><code>and</code></td>
+                            <td>logical and</td>
+                        </tr>
+                        <tr>
+                            <td><code>contains</code></td>
+                            <td>returns true when a substring inside a string is found (works on arrays too)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>IF/Else Block</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% if ${first_name} != blank %}
+	Hello {{${first_name}}}
+{% else %}
+	Hello there
+{% endif %}</code></pre>
+                </div>
+
+                <h3>Elsif / Else Block</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% if ${language} == 'es' %}
+	¡Gracias por descargar nuestra aplicación!
+{% elsif  ${language} == 'fr' %}
+	Merci d'avoir téléchargé notre application!
+{% else %}
+	Thanks for downloading our app!
+{% endif %}</code></pre>
+                </div>
+
+                <h3>Unless Block</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% unless ${first_name} == blank %}
+	Hello {{${first_name}}}, thanks for downloading our app!
+{% endunless %}</code></pre>
+                </div>
+
+                <h3>Case/When Block</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% case {{custom_attribute.${fav_color}}} %}
+{% when "aqua" %}
+	{% assign color = "#00FFFF" %}
+{% when "green", "Cadmium_Green", "Grass" %}
+	{% assign color = "#097969" %}
+{% else %}
+	{% assign color = "#8B4000" %}
+{% endcase %}
+&lt;div style="background-color: {{color}}"&gt;
+	&lt;p&gt;the lazy dog jumped over the quick brown fox&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+
+                <!-- ITERATION SECTION -->
+                <h2 id="iteration">Iteration</h2>
+
+                <h3>Basic Loop</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% for flavor in {{custom_attribute.${flavors}}} %}
+	&lt;p&gt; The flavor of the week is: {{flavor}}&lt;/p&gt;
+{% endfor %}</code></pre>
+                </div>
+
+                <h3>Loop with array of objects</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign orders = {{custom_attribute.${orders}}} %}
+{% assign total = 0 %}
+{% for order in orders %}
+	{% assign total = total | plus: order.cost %}
+	&lt;h3&gt;Order # {{order.id}}&lt;/h3&gt;
+	&lt;ul&gt;
+		&lt;li&gt;{{ order.flavor }}&lt;/li&gt;
+		&lt;li&gt;{{ order.size }}&lt;/li&gt;
+		&lt;li&gt;&lt;b&gt;{{ order.sause}}&lt;/li&gt;
+		&lt;li&gt;{% if order.side == true %}Yes!{% else %}No!{% endif %}&lt;/li&gt;
+		&lt;li&gt;${{order.cost}}&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;hr&gt;
+{% endfor %}
+&lt;h3&gt;Total: ${{total}}&lt;/h3&gt;</code></pre>
+                </div>
+
+                <h3>Using Else</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign orders = {{custom_attribute.${orders}}} %}
+{% assign total = 0 %}
+{% for order in orders %}
+	{% assign total = total | plus: order.cost %}
+	&lt;h3&gt;{{order.id}}&lt;/h3&gt;
+	&lt;ul&gt;
+		&lt;li&gt;{{ order.flavor }}&lt;/li&gt;
+		&lt;li&gt;{{ order.size }}&lt;/li&gt;
+		&lt;li&gt;{{ order.sause}}&lt;/li&gt;
+		&lt;li&gt;{% if order.side == true %}Yes!{% else %}No!{% endif %}&lt;/b&gt;&lt;/li&gt;
+		&lt;li&gt;${{order.cost}}&lt;/li&gt;
+	&lt;/ul&gt;
+{% else %}
+	&lt;p&gt; Something went wrong and your order was not completed. Please call us at number-here.
+&lt;hr&gt;
+{% endfor %}
+&lt;h3&gt;Total: ${{total}}&lt;/h3&gt;</code></pre>
+                </div>
+
+                <h3>Using Break</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% for flavor in {{custom_attribute.${flavors}}} %}
+{% if flavor == 'cheddar' %}
+    {% break%}
+{% else %}
+    &lt;p&gt; The flavor of the week is: {{flavor}}&lt;/p&gt;
+{% endif %}
+{% else %}
+    &lt;p&gt;Flavor of the week promotion is not available at the moment &lt;/p&gt;
+{% endfor %}</code></pre>
+                </div>
+
+                <h3>Using Continue</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% for flavor in {{custom_attribute.${flavors}}} %}
+{% if flavor == 'cheddar' or flavor == 'buffalo' %}
+    {% continue %}
+{% else %}
+    &lt;p&gt; The flavor of the week is: {{flavor}}&lt;/p&gt;
+{% endif %}
+{% else %}
+    &lt;p&gt;Flavor of the week promotion is not available at the moment &lt;/p&gt;
+{% endfor %}</code></pre>
+                </div>
+
+                <h3>Using parameters</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% for flavor in {{custom_attribute.${flavors}}} limit: 5 %}
+    &lt;p&gt; The flavor of the week is: {{flavor}}&lt;/p&gt;
+{% else %}
+    &lt;p&gt;Flavor of the week promotion is not available at the moment &lt;/p&gt;
+{% endfor %}
+
+{% for flavor in {{custom_attribute.${flavors}}} offset: 4 %}
+    &lt;p&gt; The flavor of the week is: {{flavor}}&lt;/p&gt;
+{% else %}
+    &lt;p&gt;Flavor of the week promotion is not available at the moment &lt;/p&gt;
+{% endfor %}
+
+{% for i in (3..5) %}
+  {{ i }}
+{% endfor %}
+
+{% for flavor in {{custom_attribute.${flavors}}} %}
+  {% if forloop.length > 0 %}
+    {{ flavor }}{% unless forloop.last %},{% endunless -%}
+  {%- endif -%}
+{% endfor %}</code></pre>
+                </div>
+
+                <h3>Reversing & Sorting an array</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign flavors_sorted = {{custom_attribute.${flavors} | sort }} %}
+
+&lt;h1&gt;Unsorted Array:&lt;/h1&gt;
+
+{% for flavor in {{custom_attribute.${flavors}}} %}
+	&lt;ul&gt;
+		&lt;li&gt;Flavor: {{flavor}} &lt;/li&gt;
+	&lt;/ul&gt;
+{% endfor %}
+&lt;hr&gt;
+
+&lt;h1&gt;Sorted array:&lt;/h1&gt;
+{% for flavor in flavors_sorted %}
+	&lt;ul&gt;
+		&lt;li&gt;Flavor: {{flavor}} &lt;/li&gt;
+	&lt;/ul&gt;
+{% endfor %}
+&lt;hr&gt;
+
+&lt;h1&gt;Sorted Reversed array:&lt;/h1&gt;
+{% for flavor in flavors_sorted reversed %}
+	&lt;ul&gt;
+		&lt;li&gt;Flavor: {{flavor}} &lt;/li&gt;
+	&lt;/ul&gt;
+{% endfor %}</code></pre>
+                </div>
+
+                <!-- ABORT TAG SECTION -->
+                <h2 id="abort">Abort tag</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% if ${language} == 'en' %}
+	Send this message in English!
+{% else %}
+	{% abort_message('lang was not en') %}
+{% endif %}</code></pre>
+                </div>
+
+                <!-- DATES SECTION -->
+                <h2 id="dates">Dates</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign iso_date = 'now' | date: '%Y-%m-%d %H:%M:%S.%6N %Z'%}</code></pre>
+                </div>
+
+                <!-- EASY SUBJECT LINE SECTION -->
+                <h2 id="subject-line">Easy subject line</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% liquid
+echo TEST campaign.${name} | default: 'Braze Support Testing' | append: ' '
+echo 'now' | date: '%Y-%m-%d %H:%M:%S.%6N %Z'
+%}</code></pre>
+                </div>
+
+                <!-- WHITESPACE CONTROL SECTION -->
+                <h2 id="whitespace">Whitespace control</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{{content_blocks.${subjectLine}}}
+{{- subject_line | strip | strip_newlines -}}</code></pre>
+                </div>
+
+                <!-- CONTEXT, API, EVENTS SECTION -->
+                <h2 id="context">Context, API, Events</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{{context.${example_variable_name}}}
+{{event_properties.${your_custom_event_property}}}
+{{api_trigger_properties.${your_api_trigger_property}}}</code></pre>
+                </div>
+
+                <!-- CONNECTED CONTENT SECTION -->
+                <h2 id="connected-content">Connected content</h2>
+
+                <h3>JSON Example</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-json">{
+  "movies": [
+    {
+      "name": "Inception",
+      "description": "A skilled thief is given a chance at redemption if he can successfully perform inception.",
+      "dvd_image_url": "https://m.media-amazon.com/images/I/71uKM+LdgFL.jpg"
+    },
+    {
+      "name": "The Matrix",
+      "description": "A computer hacker learns about the true nature of his reality and his role in the war against its controllers.",
+      "dvd_image_url": "https://m.media-amazon.com/images/I/71PfZFFz9yL._AC_UF894,1000_QL80_.jpg"
+    },
+    {
+      "name": "Interstellar",
+      "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "dvd_image_url": "https://m.media-amazon.com/images/I/514zBLkyJcL._AC_UF894,1000_QL80_.jpg"
+    }
+  ]
+}</code></pre>
+                </div>
+
+                <h3>CC Example Object</h3>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% connected_content https://webhook.site/64a710c8-8fe8-4a40-ab9d-eab23388ad41 :save movies_payload %}
+
+{% assign movies = movies_payload.movies %}
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Movie Name&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+      &lt;th&gt;DVD Image&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    {% for movie in movies %}
+    &lt;tr&gt;
+      &lt;td&gt;{{ movie.name }}&lt;/td&gt;
+      &lt;td width="400"&gt;{{ movie.description }}&lt;/td&gt;
+      &lt;td&gt;&lt;img width="70" height="100" src="{{ movie.dvd_image_url }}"
+      alt="{{ movie.name }} DVD Cover" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    {% endfor %}
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+                </div>
+
+                <!-- CATALOGS EXAMPLE SECTION -->
+                <h2 id="catalogs">Catalogs Example</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% catalog_items Games 1234 %}
+{% if items[0].on_sale == true %}
+  {{ items[0].title }} is on sale! Get it for {{ items[0].price }}.
+{% else %}
+  Check out {{ items[0].title }} at full price.
+{% endif %}</code></pre>
+                </div>
+
+                <!-- CATALOGS SELECTION SECTION -->
+                <h2 id="catalogs-selection">Catalogs Selection</h2>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% catalog_selection_items item-list selections %}
+{% if items[0].venue_name.size > 10 %}
+Message if the venue name's size is more than 10 characters.
+{% elsif items[0].venue_name.size <= 10 %}
+Message if the venue name's size is 10 characters or fewer.
+{% else %}
+{% abort_message('no venue_name') %}
+{% endif %}</code></pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { codeToHtml } from 'https://esm.sh/shiki@1.0.0'
+
+        // Print functionality
+        const printBtn = document.getElementById('printBtn');
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const body = document.body;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        async function highlightCodeBlocks(theme) {
+            const codeBlocks = document.querySelectorAll('pre code');
+            for (const codeBlock of codeBlocks) {
+                const code = codeBlock.textContent;
+                const language = 'liquid';
+
+                try {
+                    const html = await codeToHtml(code, {
+                        lang: language,
+                        theme: theme === 'dark' ? 'nord' : 'github-light'
+                    });
+
+                    const pre = codeBlock.parentElement;
+                    const wrapper = pre.parentElement;
+                    const newPre = document.createElement('div');
+                    newPre.innerHTML = html;
+                    newPre.style.overflow = 'auto';
+                    newPre.style.borderRadius = '4px';
+                    newPre.style.marginBottom = '0';
+
+                    // Preserve the wrapper structure
+                    pre.replaceWith(newPre.firstChild);
+                } catch (err) {
+                    console.error('Error highlighting code:', err);
+                }
+            }
+        }
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                htmlElement.setAttribute('data-theme', 'light');
+                themeToggle.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }
+            highlightCodeBlocks(theme);
+        }
+
+        // Set initial theme
+        setTheme(currentTheme);
+
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const theme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+            setTheme(theme);
+        });
+
+        // Copy to clipboard functionality
+        window.copyCode = function(button) {
+            const codeBlock = button.nextElementSibling;
+            let text = '';
+
+            if (codeBlock.querySelector('code')) {
+                text = codeBlock.querySelector('code').textContent;
+            } else {
+                // For Shiki highlighted code
+                const shikiCode = codeBlock.querySelector('.shiki code');
+                if (shikiCode) {
+                    text = shikiCode.textContent;
+                } else {
+                    text = codeBlock.textContent;
+                }
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.textContent = '❌ Error';
+                setTimeout(() => {
+                    button.textContent = '📋 Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
