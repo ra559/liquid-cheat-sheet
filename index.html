@@ -344,6 +344,12 @@
                     <pre><code class="language-liquid">{% capture variable_name %}value{% endcapture %}</code></pre>
                 </div>
 
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    <pre><code class="language-liquid">{% assign code = {{custom_attribute.${users_promo_code}}} %}
+Here is a promo code: {{ code }}</code></pre>
+                </div>               
+
                 <!-- CONTROL FLOW SECTION -->
                 <h2 id="control-flow">Control Flow</h2>
 
